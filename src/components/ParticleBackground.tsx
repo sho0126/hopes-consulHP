@@ -31,52 +31,53 @@ const ParticleBackground: React.FC = () => {
     };
 
     const createParticles = () => {
-      const particleCount = window.innerWidth < 768 ? 25 : 40;
+      const particleCount = window.innerWidth < 768 ? 30 : 50;
       particlesRef.current = [];
 
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.5 + 0.3,
-          hue: Math.random() * 60 + 200, // 青系の色相
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: (Math.random() - 0.5) * 0.8,
+          size: Math.random() * 4 + 2,
+          opacity: Math.random() * 0.6 + 0.4,
+          hue: Math.random() * 60 + 200,
           pulse: Math.random() * Math.PI * 2
         });
       }
     };
 
     const drawParticle = (particle: Particle, time: number) => {
-      const pulseFactor = Math.sin(time * 0.002 + particle.pulse) * 0.3 + 0.7;
+      const pulseFactor = Math.sin(time * 0.003 + particle.pulse) * 0.4 + 0.8;
       const currentSize = particle.size * pulseFactor;
       const currentOpacity = particle.opacity * pulseFactor;
 
       // 外側のグロー
       const gradient = ctx.createRadialGradient(
         particle.x, particle.y, 0,
-        particle.x, particle.y, currentSize * 4
+        particle.x, particle.y, currentSize * 6
       );
-      gradient.addColorStop(0, `hsla(${particle.hue}, 70%, 60%, ${currentOpacity * 0.2})`);
-      gradient.addColorStop(0.5, `hsla(${particle.hue}, 70%, 50%, ${currentOpacity * 0.1})`);
-      gradient.addColorStop(1, `hsla(${particle.hue}, 70%, 40%, 0)`);
+      gradient.addColorStop(0, `hsla(${particle.hue}, 70%, 60%, ${currentOpacity * 0.3})`);
+      gradient.addColorStop(0.3, `hsla(${particle.hue}, 70%, 50%, ${currentOpacity * 0.2})`);
+      gradient.addColorStop(0.7, `hsla(${particle.hue}, 70%, 40%, ${currentOpacity * 0.1})`);
+      gradient.addColorStop(1, `hsla(${particle.hue}, 70%, 30%, 0)`);
 
       ctx.fillStyle = gradient;
       ctx.beginPath();
-      ctx.arc(particle.x, particle.y, currentSize * 4, 0, Math.PI * 2);
+      ctx.arc(particle.x, particle.y, currentSize * 6, 0, Math.PI * 2);
       ctx.fill();
 
       // 中心の明るい点
-      ctx.fillStyle = `hsla(${particle.hue}, 80%, 80%, ${currentOpacity * 0.4})`;
+      ctx.fillStyle = `hsla(${particle.hue}, 80%, 80%, ${currentOpacity * 0.6})`;
       ctx.beginPath();
       ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
       ctx.fill();
 
       // 中心の白い点
-      ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.4})`;
       ctx.beginPath();
-      ctx.arc(particle.x, particle.y, currentSize * 0.3, 0, Math.PI * 2);
+      ctx.arc(particle.x, particle.y, currentSize * 0.4, 0, Math.PI * 2);
       ctx.fill();
     };
 
@@ -89,12 +90,12 @@ const ParticleBackground: React.FC = () => {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 120) {
-            const opacity = (1 - distance / 120) * 0.15;
+          if (distance < 150) {
+            const opacity = (1 - distance / 150) * 0.2;
             const avgHue = (particles[i].hue + particles[j].hue) / 2;
             
             ctx.strokeStyle = `hsla(${avgHue}, 60%, 70%, ${opacity})`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -115,23 +116,23 @@ const ParticleBackground: React.FC = () => {
         particle.y += particle.vy;
 
         // スクロール効果
-        const scrollEffect = Math.sin(time * 0.001 + scroll * 0.01) * 0.5;
+        const scrollEffect = Math.sin(time * 0.001 + scroll * 0.01) * 0.8;
         particle.x += scrollEffect;
 
-        // マウス追従効果（控えめ）
+        // マウス追従効果
         const mouseDistance = Math.sqrt(
           Math.pow(particle.x - mouse.x, 2) + Math.pow(particle.y - mouse.y, 2)
         );
-        if (mouseDistance < 150) {
-          const force = (150 - mouseDistance) / 150 * 0.02;
+        if (mouseDistance < 200) {
+          const force = (200 - mouseDistance) / 200 * 0.03;
           const angle = Math.atan2(mouse.y - particle.y, mouse.x - particle.x);
           particle.vx += Math.cos(angle) * force;
           particle.vy += Math.sin(angle) * force;
         }
 
         // 速度制限
-        particle.vx *= 0.99;
-        particle.vy *= 0.99;
+        particle.vx *= 0.98;
+        particle.vy *= 0.98;
 
         // 境界での反射
         if (particle.x < 0 || particle.x > canvas.width) {
@@ -144,7 +145,7 @@ const ParticleBackground: React.FC = () => {
         }
 
         // 色相の微調整
-        particle.hue += Math.sin(time * 0.0005) * 0.1;
+        particle.hue += Math.sin(time * 0.0008) * 0.2;
       });
     };
 
@@ -195,7 +196,7 @@ const ParticleBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
+      className="absolute inset-0 pointer-events-none"
       style={{ background: 'transparent' }}
     />
   );

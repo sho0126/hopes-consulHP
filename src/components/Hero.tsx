@@ -1,105 +1,48 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ParticleBackground from './ParticleBackground';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-
-  const isActive = (path: string) => location.pathname === path;
-
+const Hero = () => {
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-light bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent tracking-wide hover:opacity-80 transition-opacity">
-              HOPES CONSULTING
-            </Link>
-          </div>
-          
-          <nav className="hidden md:flex space-x-12">
-            <Link 
-              to="/" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              HOME
-            </Link>
-            <Link 
-              to="/services" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/services') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              SERVICES
-            </Link>
-            <Link 
-              to="/products" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/products') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              PRODUCTS
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/about') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              ABOUT
-            </Link>
-            <Link 
-              to="/news" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/news') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              NEWS
-            </Link>
-            <Link 
-              to="/contact" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/contact') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              CONTACT
-            </Link>
-          </nav>
-
+    <section className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center overflow-hidden">
+      <ParticleBackground />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mb-8">
+          <span className="text-sm font-medium text-gray-500 tracking-widest uppercase">AI × BUSINESS CONSULTING</span>
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-12 leading-tight bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+          AIが実現する
+          <br />
+          未来の働き方
+        </h1>
+        
+        <p className="text-xl md:text-2xl mb-16 text-gray-600 max-w-4xl mx-auto leading-relaxed font-light">
+          中小企業診断士とAIエンジニアが最適なDXを設計し、
+          <br />
+          一人当たり20%の業務削減を実現いたします。
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-6 justify-center">
           <Link 
-            to="/contact" 
-            className="hidden md:block bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white px-8 py-3 text-sm font-medium tracking-wide hover:shadow-lg transition-all duration-300 rounded-lg"
+            to="/contact"
+            className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white px-12 py-4 text-lg font-medium tracking-wide hover:shadow-lg transition-all duration-300 rounded-lg inline-flex items-center justify-center"
           >
-            お問い合わせ
+            無料相談を予約する
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
-
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          <Link 
+            to="/services"
+            className="bg-white/80 backdrop-blur-sm text-gray-700 px-12 py-4 text-lg font-medium tracking-wide hover:bg-white transition-all duration-300 rounded-lg border border-gray-200 inline-flex items-center justify-center"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+            サービス詳細を見る
+          </Link>
         </div>
       </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100">
-          <nav className="px-4 py-4 space-y-3">
-            <Link to="/" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>HOME</Link>
-            <Link to="/services" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>SERVICES</Link>
-            <Link to="/products" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>PRODUCTS</Link>
-            <Link to="/about" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>ABOUT</Link>
-            <Link to="/news" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>NEWS</Link>
-            <Link to="/contact" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>CONTACT</Link>
-          </nav>
-        </div>
-      )}
-    </header>
+    </section>
   );
 };
 
-export default Header;
+export default Hero;
