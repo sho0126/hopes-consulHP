@@ -1,104 +1,81 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { Calendar, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-
-  const isActive = (path: string) => location.pathname === path;
+const NewsSection = () => {
+  const newsItems = [
+    {
+      id: 1,
+      title: 'AI導入支援サービスの提供を開始しました',
+      date: '2024-01-15',
+      excerpt: 'Custom GPTsを活用した業務自動化支援サービスの提供を開始いたします。中小企業様向けに特化したパッケージをご用意しました。',
+      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600'
+    },
+    {
+      id: 2,
+      title: '製造業A社様にてDX推進プロジェクトが完了',
+      date: '2024-01-10',
+      excerpt: '生産管理システムの導入により、業務効率が30%向上。月間160時間の工数削減を実現しました。',
+      image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=600'
+    },
+    {
+      id: 3,
+      title: 'IT導入補助金2024年度の申請支援を開始',
+      date: '2024-01-05',
+      excerpt: '2024年度IT導入補助金の申請支援サービスを開始いたします。採択率向上のための専門的なサポートを提供します。',
+      image: 'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=600'
+    }
+  ];
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-blue-100">
+    <section className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-light text-slate-900 tracking-wide hover:text-blue-700 transition-colors">
-              HOPES CONSULTING
-            </Link>
-          </div>
-          
-          <nav className="hidden md:flex space-x-12">
-            <Link 
-              to="/" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              HOME
-            </Link>
-            <Link 
-              to="/services" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/services') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              SERVICES
-            </Link>
-            <Link 
-              to="/products" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/products') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              PRODUCTS
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/about') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              ABOUT
-            </Link>
-            <Link 
-              to="/news" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/news') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              NEWS
-            </Link>
-            <Link 
-              to="/contact" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/contact') ? 'text-slate-900' : 'text-slate-600 hover:text-blue-700'
-              }`}
-            >
-              CONTACT
-            </Link>
-          </nav>
-
+        <div className="flex justify-between items-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-light leading-tight bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
+            最新ニュース
+          </h2>
           <Link 
-            to="/contact" 
-            className="hidden md:block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 text-sm font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-lg shadow-lg"
+            to="/news"
+            className="text-gray-700 hover:text-gray-900 font-medium inline-flex items-center transition-colors duration-300"
           >
-            お問い合わせ
+            すべて見る
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
+        </div>
 
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+        <div className="grid md:grid-cols-3 gap-8">
+          {newsItems.map((item) => (
+            <article key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+              <img 
+                src={item.image} 
+                alt={item.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-8">
+                <div className="flex items-center text-gray-500 text-sm mb-4">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  {item.date}
+                </div>
+                <h3 className="text-xl font-light text-gray-900 mb-4 leading-tight">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 font-light mb-6">
+                  {item.excerpt}
+                </p>
+                <Link 
+                  to={`/news/${item.id}`}
+                  className="text-gray-700 hover:text-gray-900 font-medium inline-flex items-center transition-colors duration-300"
+                >
+                  続きを読む
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-blue-100">
-          <nav className="px-4 py-4 space-y-3">
-            <Link to="/" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>HOME</Link>
-            <Link to="/services" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>SERVICES</Link>
-            <Link to="/products" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>PRODUCTS</Link>
-            <Link to="/about" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>ABOUT</Link>
-            <Link to="/news" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>NEWS</Link>
-            <Link to="/contact" className="block text-slate-600 hover:text-blue-700 py-2" onClick={() => setIsMenuOpen(false)}>CONTACT</Link>
-          </nav>
-        </div>
-      )}
-    </header>
+    </section>
   );
 };
 
-export default Header;
+export default NewsSection;
