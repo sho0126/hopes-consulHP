@@ -1,104 +1,204 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+  hue: number;
+  pulse: number;
+}
 
-  const isActive = (path: string) => location.pathname === path;
+const ParticleBackground: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
+  const animationRef = useRef<number>();
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const scrollRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const createParticles = () => {
+      const particleCount = window.innerWidth < 768 ? 25 : 40;
+      particlesRef.current = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        particlesRef.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 3 + 1,
+          opacity: Math.random() * 0.5 + 0.3,
+          hue: Math.random() * 60 + 200, // 青系の色相
+          pulse: Math.random() * Math.PI * 2
+        });
+      }
+    };
+
+    const drawParticle = (particle: Particle, time: number) => {
+      const pulseFactor = Math.sin(time * 0.002 + particle.pulse) * 0.3 + 0.7;
+      const currentSize = particle.size * pulseFactor;
+      const currentOpacity = particle.opacity * pulseFactor;
+
+      // 外側のグロー
+      const gradient = ctx.createRadialGradient(
+        particle.x, particle.y, 0,
+        particle.x, particle.y, currentSize * 4
+      );
+      gradient.addColorStop(0, `hsla(${particle.hue}, 70%, 60%, ${currentOpacity * 0.2})`);
+      gradient.addColorStop(0.5, `hsla(${particle.hue}, 70%, 50%, ${currentOpacity * 0.1})`);
+      gradient.addColorStop(1, `hsla(${particle.hue}, 70%, 40%, 0)`);
+
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, currentSize * 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 中心の明るい点
+      ctx.fillStyle = `hsla(${particle.hue}, 80%, 80%, ${currentOpacity * 0.4})`;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 中心の白い点
+      ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, currentSize * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const drawConnections = () => {
+      const particles = particlesRef.current;
+      
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 120) {
+            const opacity = (1 - distance / 120) * 0.15;
+            const avgHue = (particles[i].hue + particles[j].hue) / 2;
+            
+            ctx.strokeStyle = `hsla(${avgHue}, 60%, 70%, ${opacity})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    const updateParticles = (time: number) => {
+      const particles = particlesRef.current;
+      const mouse = mouseRef.current;
+      const scroll = scrollRef.current;
+
+      particles.forEach((particle) => {
+        // 基本的な動き
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // スクロール効果
+        const scrollEffect = Math.sin(time * 0.001 + scroll * 0.01) * 0.5;
+        particle.x += scrollEffect;
+
+        // マウス追従効果（控えめ）
+        const mouseDistance = Math.sqrt(
+          Math.pow(particle.x - mouse.x, 2) + Math.pow(particle.y - mouse.y, 2)
+        );
+        if (mouseDistance < 150) {
+          const force = (150 - mouseDistance) / 150 * 0.02;
+          const angle = Math.atan2(mouse.y - particle.y, mouse.x - particle.x);
+          particle.vx += Math.cos(angle) * force;
+          particle.vy += Math.sin(angle) * force;
+        }
+
+        // 速度制限
+        particle.vx *= 0.99;
+        particle.vy *= 0.99;
+
+        // 境界での反射
+        if (particle.x < 0 || particle.x > canvas.width) {
+          particle.vx *= -1;
+          particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        }
+        if (particle.y < 0 || particle.y > canvas.height) {
+          particle.vy *= -1;
+          particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        }
+
+        // 色相の微調整
+        particle.hue += Math.sin(time * 0.0005) * 0.1;
+      });
+    };
+
+    const animate = (time: number) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      updateParticles(time);
+      drawConnections();
+      
+      particlesRef.current.forEach(particle => {
+        drawParticle(particle, time);
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleScroll = () => {
+      scrollRef.current = window.scrollY;
+    };
+
+    // 初期化
+    resizeCanvas();
+    createParticles();
+    animate(0);
+
+    // イベントリスナー
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createParticles();
+    });
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-light bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent tracking-wide hover:opacity-80 transition-opacity">
-              HOPES CONSULTING
-            </Link>
-          </div>
-          
-          <nav className="hidden md:flex space-x-12">
-            <Link 
-              to="/" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              HOME
-            </Link>
-            <Link 
-              to="/services" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/services') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              SERVICES
-            </Link>
-            <Link 
-              to="/products" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/products') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              PRODUCTS
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/about') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              ABOUT
-            </Link>
-            <Link 
-              to="/news" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/news') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              NEWS
-            </Link>
-            <Link 
-              to="/contact" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/contact') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              CONTACT
-            </Link>
-          </nav>
-
-          <Link 
-            to="/contact" 
-            className="hidden md:block bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white px-8 py-3 text-sm font-medium tracking-wide hover:shadow-lg transition-all duration-300 rounded-lg"
-          >
-            お問い合わせ
-          </Link>
-
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100">
-          <nav className="px-4 py-4 space-y-3">
-            <Link to="/" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>HOME</Link>
-            <Link to="/services" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>SERVICES</Link>
-            <Link to="/products" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>PRODUCTS</Link>
-            <Link to="/about" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>ABOUT</Link>
-            <Link to="/news" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>NEWS</Link>
-            <Link to="/contact" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>CONTACT</Link>
-          </nav>
-        </div>
-      )}
-    </header>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 pointer-events-none z-0"
+      style={{ background: 'transparent' }}
+    />
   );
 };
 
-export default Header;
+export default ParticleBackground;
