@@ -1,104 +1,192 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  color: string;
+  opacity: number;
+  pulsePhase: number;
+}
 
-  const isActive = (path: string) => location.pathname === path;
+const ParticleBackground: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number>();
+  const particlesRef = useRef<Particle[]>([]);
+
+  const colors = [
+    'rgba(59, 130, 246, 0.6)',   // Blue
+    'rgba(6, 182, 212, 0.6)',    // Cyan  
+    'rgba(99, 102, 241, 0.6)',   // Indigo
+    'rgba(20, 184, 166, 0.6)'    // Teal
+  ];
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const createParticles = () => {
+      const particles: Particle[] = [];
+      const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+      
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 3 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.8 + 0.2,
+          pulsePhase: Math.random() * Math.PI * 2
+        });
+      }
+      
+      particlesRef.current = particles;
+    };
+
+    const drawParticle = (particle: Particle, time: number) => {
+      const pulse = Math.sin(time * 0.002 + particle.pulsePhase) * 0.3 + 0.7;
+      const currentOpacity = particle.opacity * pulse;
+      
+      // Main particle
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      ctx.fillStyle = particle.color.replace('0.6', currentOpacity.toString());
+      ctx.fill();
+      
+      // Glow effect
+      const gradient = ctx.createRadialGradient(
+        particle.x, particle.y, 0,
+        particle.x, particle.y, particle.size * 3
+      );
+      gradient.addColorStop(0, particle.color.replace('0.6', (currentOpacity * 0.8).toString()));
+      gradient.addColorStop(1, particle.color.replace('0.6', '0'));
+      
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+    };
+
+    const drawConnections = (particles: Particle[]) => {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 120) {
+            const opacity = (1 - distance / 120) * 0.3;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    const drawEdgeGlow = (time: number) => {
+      const pulse = Math.sin(time * 0.001) * 0.3 + 0.7;
+      
+      // Top edge
+      const topGradient = ctx.createLinearGradient(0, 0, 0, 100);
+      topGradient.addColorStop(0, `rgba(59, 130, 246, ${0.1 * pulse})`);
+      topGradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+      ctx.fillStyle = topGradient;
+      ctx.fillRect(0, 0, canvas.width, 100);
+      
+      // Bottom edge
+      const bottomGradient = ctx.createLinearGradient(0, canvas.height - 100, 0, canvas.height);
+      bottomGradient.addColorStop(0, 'rgba(6, 182, 212, 0)');
+      bottomGradient.addColorStop(1, `rgba(6, 182, 212, ${0.1 * pulse})`);
+      ctx.fillStyle = bottomGradient;
+      ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+      
+      // Left edge
+      const leftGradient = ctx.createLinearGradient(0, 0, 100, 0);
+      leftGradient.addColorStop(0, `rgba(99, 102, 241, ${0.1 * pulse})`);
+      leftGradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+      ctx.fillStyle = leftGradient;
+      ctx.fillRect(0, 0, 100, canvas.height);
+      
+      // Right edge
+      const rightGradient = ctx.createLinearGradient(canvas.width - 100, 0, canvas.width, 0);
+      rightGradient.addColorStop(0, 'rgba(20, 184, 166, 0)');
+      rightGradient.addColorStop(1, `rgba(20, 184, 166, ${0.1 * pulse})`);
+      ctx.fillStyle = rightGradient;
+      ctx.fillRect(canvas.width - 100, 0, 100, canvas.height);
+    };
+
+    const animate = (time: number) => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw edge glow
+      drawEdgeGlow(time);
+      
+      const particles = particlesRef.current;
+      
+      // Update and draw particles
+      particles.forEach(particle => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        
+        // Bounce off edges
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        
+        // Keep particles in bounds
+        particle.x = Math.max(0, Math.min(canvas.width, particle.x));
+        particle.y = Math.max(0, Math.min(canvas.height, particle.y));
+        
+        drawParticle(particle, time);
+      });
+      
+      // Draw connections
+      drawConnections(particles);
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    resizeCanvas();
+    createParticles();
+    animate(0);
+
+    const handleResize = () => {
+      resizeCanvas();
+      createParticles();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm fixed w-full top-0 z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-light bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent tracking-wide hover:opacity-80 transition-opacity">
-              HOPES CONSULTING
-            </Link>
-          </div>
-          
-          <nav className="hidden md:flex space-x-12">
-            <Link 
-              to="/" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              HOME
-            </Link>
-            <Link 
-              to="/services" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/services') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              SERVICES
-            </Link>
-            <Link 
-              to="/products" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/products') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              PRODUCTS
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/about') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              ABOUT
-            </Link>
-            <Link 
-              to="/news" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/news') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              NEWS
-            </Link>
-            <Link 
-              to="/contact" 
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/contact') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
-              }`}
-            >
-              CONTACT
-            </Link>
-          </nav>
-
-          <Link 
-            to="/contact" 
-            className="hidden md:block bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 text-white px-8 py-3 text-sm font-medium tracking-wide hover:shadow-lg transition-all duration-300 rounded-lg"
-          >
-            お問い合わせ
-          </Link>
-
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
-
-      {isMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100">
-          <nav className="px-4 py-4 space-y-3">
-            <Link to="/" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>HOME</Link>
-            <Link to="/services" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>SERVICES</Link>
-            <Link to="/products" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>PRODUCTS</Link>
-            <Link to="/about" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>ABOUT</Link>
-            <Link to="/news" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>NEWS</Link>
-            <Link to="/contact" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>CONTACT</Link>
-          </nav>
-        </div>
-      )}
-    </header>
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ background: 'transparent' }}
+    />
   );
 };
 
-export default Header;
+export default ParticleBackground;
