@@ -13,7 +13,7 @@ const ServicesOverview = () => {
     },
     {
       icon: Users,
-      title: 'DX戦略策定',
+      title: '効率化戦略策定',
       description: '中小企業診断士が経営視点でROIを重視したデジタル変革戦略を設計します。',
       features: ['現状分析', '戦略立案', '実行支援'],
       link: '/services'
@@ -41,8 +41,8 @@ const ServicesOverview = () => {
 
         <div className="grid md:grid-cols-3 gap-12">
           {services.map((service, index) => (
-            <div key={index} className="bg-white rounded-3xl p-10 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-16 h-16 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-full flex items-center justify-center mb-8">
+            <div key={index} className="bg-white rounded-3xl p-10 shadow-sm hover:shadow-md transition-all duration-300 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-full flex items-center justify-center mb-8 mx-auto">
                 <service.icon className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-light text-gray-900 mb-6">
@@ -53,15 +53,15 @@ const ServicesOverview = () => {
               </p>
               <ul className="space-y-2 mb-8">
                 {service.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center text-gray-600">
+                  <li key={featureIndex} className="flex items-center justify-center text-gray-600">
                     <div className="w-2 h-2 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-full mr-3"></div>
                     {feature}
                   </li>
                 ))}
               </ul>
-              <Link 
+              <Link
                 to={service.link}
-                className="text-gray-700 hover:text-gray-900 font-medium inline-flex items-center transition-colors duration-300"
+                className="text-gray-700 hover:text-gray-900 font-medium inline-flex items-center justify-center transition-colors duration-300"
               >
                 詳しく見る
                 <ArrowRight className="ml-2 h-4 w-4" />

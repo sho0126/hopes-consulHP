@@ -17,7 +17,7 @@ const News = () => {
     },
     {
       id: 2,
-      title: '製造業A社様にてDX推進プロジェクトが完了',
+      title: '製造業A社様にて効率化推進プロジェクトが完了',
       category: '導入事例',
       date: '2024-01-10',
       excerpt: '生産管理システムの導入により、業務効率が30%向上。月間160時間の工数削減を実現しました。',
@@ -44,7 +44,7 @@ const News = () => {
       title: 'ホープスコンサルティング設立のお知らせ',
       category: 'プレスリリース',
       date: '2023-12-01',
-      excerpt: 'AI・DXコンサルティング事業を展開するホープスコンサルティング株式会社を設立いたしました。',
+      excerpt: 'AI・効率化コンサルティング事業を展開するホープスコンサルティング株式会社を設立いたしました。',
       image: 'https://images.pexels.com/photos/3184639/pexels-photo-3184639.jpeg?auto=compress&cs=tinysrgb&w=600'
     },
     {

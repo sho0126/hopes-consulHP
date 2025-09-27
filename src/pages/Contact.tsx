@@ -186,7 +186,7 @@ const Contact = () => {
                 <option value="">選択してください</option>
                 <option value="consultation">無料相談</option>
                 <option value="ai-support">AI導入支援について</option>
-                <option value="dx-strategy">DX戦略策定について</option>
+                <option value="効率化-strategy">効率化戦略策定について</option>
                 <option value="development">受託開発について</option>
                 <option value="subsidy">補助金活用支援について</option>
                 <option value="other">その他</option>

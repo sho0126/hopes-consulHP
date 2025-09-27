@@ -6,7 +6,7 @@ const About = () => {
     {
       name: '代表取締役 田中 太郎',
       role: '中小企業診断士 / AIコンサルタント',
-      description: '大手IT企業で10年間のシステム開発経験を経て、中小企業診断士として独立。経営とテクノロジーの両面から企業のDXを支援。',
+      description: '大手IT企業で10年間のシステム開発経験を経て、中小企業診断士として独立。経営とテクノロジーの両面から企業の効率化を支援。',
       image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
@@ -79,7 +79,7 @@ const About = () => {
               <div>
                 <h3 className="text-2xl font-light text-gray-900 mb-6">なぜホープスコンサルティングなのか</h3>
                 <p className="text-gray-600 leading-relaxed font-light mb-6">
-                  多くの企業がDXの必要性を感じながらも、「何から始めればいいかわからない」「投資対効果が見えない」という課題を抱えています。
+                  多くの企業が効率化の必要性を感じながらも、「何から始めればいいかわからない」「投資対効果が見えない」という課題を抱えています。
                 </p>
                 <p className="text-gray-600 leading-relaxed font-light">
                   私たちは経営とテクノロジーの両方の視点から、お客様にとって最適なソリューションを設計し、確実な成果につなげます。

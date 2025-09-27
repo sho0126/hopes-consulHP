@@ -4,8 +4,6 @@ import Problems from '../components/Problems';
 import Services from '../components/Services';
 import Advantages from '../components/Advantages';
 import ServiceFlow from '../components/ServiceFlow';
-import Pricing from '../components/Pricing';
-import FAQ from '../components/FAQ';
 
 const ServicesPage = () => {
   return (
@@ -15,8 +13,6 @@ const ServicesPage = () => {
       <Services />
       <Advantages />
       <ServiceFlow />
-      <Pricing />
-      <FAQ />
     </div>
   );
 };

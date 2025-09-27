@@ -29,7 +29,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-xl md:text-2xl mb-16 text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
-            中小企業診断士とAIエンジニアが最適なDXを設計し、
+            中小企業診断士とAIエンジニアが最適な効率化を設計し、
             <br />
             一人当たり20%の業務削減を実現いたします。
           </p>

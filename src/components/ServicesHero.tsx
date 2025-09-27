@@ -16,7 +16,7 @@ const ServicesHero = () => {
           <p className="text-xl md:text-2xl mb-16 text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
             AIが実現する、人にしかできない仕事に集中できる未来へ。
             <br />
-            中小企業診断士とAIエンジニアが最適なDXを設計し、
+            中小企業診断士とAIエンジニアが最適な効率化を設計し、
             <br />
             一人当たり20%の業務削減を実現いたします。
           </p>

@@ -13,21 +13,17 @@ const Footer = () => {
               HOPES CONSULTING
             </Link>
             <p className="text-gray-600 font-light leading-relaxed mb-8">
-              AIとビジネスの架け橋となり、企業の真の成長を支援するコンサルティング会社です。
-              中小企業診断士とAIエンジニアが最適なDXを設計し、持続可能な成長を実現します。
+              中小企業診断士とAIエンジニアのハイブリッドチームが、
+              経営視点での効率化戦略を設計。本質的な課題解決と持続的成長を実現します。
             </p>
             <div className="space-y-3">
               <div className="flex items-center text-gray-600">
                 <Mail className="h-5 w-5 mr-3" />
-                <span>info@hopes-consulting.co.jp</span>
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Phone className="h-5 w-5 mr-3" />
-                <span>03-1234-5678</span>
+                <span>info.hopesconsul@gmail.com</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <MapPin className="h-5 w-5 mr-3" />
-                <span>東京都渋谷区○○○○</span>
+                <span>東京都渋谷区渋谷2丁目2番4号青山アルコープ402号室</span>
               </div>
             </div>
           </div>
@@ -43,7 +39,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/services" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
-                  DX戦略策定
+                  効率化戦略策定
                 </Link>
               </li>
               <li>
@@ -52,8 +48,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
-                  補助金活用支援
+                <Link to="/shigyo-効率化" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
+                  士業効率化+
                 </Link>
               </li>
             </ul>
@@ -61,7 +57,7 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h3 className="text-lg font-light text-gray-900 mb-6">会社情報</h3>
+            <h3 className="text-lg font-light text-gray-900 mb-6">企業情報</h3>
             <ul className="space-y-3">
               <li>
                 <Link to="/about" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
@@ -69,13 +65,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/news" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
-                  ニュース
+                <Link to="/services" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
+                  サービス詳細
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
-                  プロダクト
+                <Link to="/news" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
+                  ニュース
                 </Link>
               </li>
               <li>
@@ -90,7 +86,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm font-light">
-              © 2024 Hopes Consulting Co., Ltd. All rights reserved.
+              © 2025 Hopes Consulting Co., Ltd. All rights reserved.
             </p>
             <div className="flex space-x-8 mt-4 md:mt-0">
               <Link to="/privacy" className="text-gray-500 hover:text-gray-700 text-sm font-light transition-colors">

@@ -27,23 +27,23 @@ const Header = () => {
             >
               HOME
             </Link>
-            <Link 
-              to="/services" 
+            <Link
+              to="/services"
               className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
                 isActive('/services') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
               }`}
             >
               SERVICES
             </Link>
-            <Link 
-              to="/products" 
+            <Link
+              to="/shigyo-効率化"
               className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
-                isActive('/products') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
+                isActive('/shigyo-効率化') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
               }`}
             >
-              PRODUCTS
+              士業効率化+
             </Link>
-            <Link 
+            <Link
               to="/about" 
               className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
                 isActive('/about') ? 'bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent' : 'text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent'
@@ -90,7 +90,7 @@ const Header = () => {
           <nav className="px-4 py-4 space-y-3">
             <Link to="/" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>HOME</Link>
             <Link to="/services" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>SERVICES</Link>
-            <Link to="/products" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>PRODUCTS</Link>
+            <Link to="/shigyo-効率化" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>士業効率化+</Link>
             <Link to="/about" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>ABOUT</Link>
             <Link to="/news" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>NEWS</Link>
             <Link to="/contact" className="block text-gray-500 hover:bg-gradient-to-r hover:from-slate-900 hover:via-blue-900 hover:to-indigo-900 hover:bg-clip-text hover:text-transparent py-2" onClick={() => setIsMenuOpen(false)}>CONTACT</Link>

@@ -8,8 +8,8 @@ const ServiceFlow = () => {
       title: '診断・計画策定',
       duration: '約1ヶ月',
       icon: Search,
-      content: '経営課題ヒアリング、業務フローの徹底的な可視化、ボトルネック特定、課題の優先順位付け、投資対効果（ROI）の試算',
-      outcome: '現状の課題と、どこから手をつければ最も効果が出るかが一目でわかる「DX戦略マップ」と「ROIシミュレーションシート」をご提出します。',
+      content: '経営課題ヒアリング、業務フローの徹底的な可視化、ボトルネック特定、課題の優先順位付け、効果の試算',
+      outcome: '現状の課題と、どこから手をつければ最も効果が出るかを特定。貴社に最適化された改善案をご提案させていただきます。',
       color: 'bg-gray-900'
     },
     {
@@ -17,7 +17,7 @@ const ServiceFlow = () => {
       title: '改善実装',
       duration: '約1〜2ヶ月',
       icon: Wrench,
-      content: 'DX戦略マップに基づき、最も効果的なツールを選定・ご提案。プロトタイプを構築し、現場でのテスト運用を実施。業務マニュアルの整備と社員様向け研修の実施。',
+      content: '最も効果的なツールを選定・ご提案。必要に応じて、弊社にてツール作成を行います。プロトタイプを構築し、現場でのテスト運用を実施。業務マニュアルの整備と社員様向け研修の実施。',
       outcome: '特定の業務において、具体的な時間削減（目標：月160時間など）を実証します。社員の皆様が自走できる状態を目指します。',
       color: 'bg-gray-700'
     },
@@ -37,7 +37,7 @@ const ServiceFlow = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-24">
           <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-8 leading-tight">
-            サービスの流れと料金
+            サービスの流れ
           </h2>
           <p className="text-xl text-gray-600 font-light">
             お客様の状況に合わせて柔軟に対応しますが、標準的な進め方は以下の通りです。

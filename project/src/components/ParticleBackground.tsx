@@ -82,9 +82,9 @@ const ParticleBackground: React.FC = () => {
     const drawConnections = (particles: Particle[]) => {
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
+          const 効率化 = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distance = Math.sqrt(効率化 * 効率化 + dy * dy);
           
           if (distance < 120) {
             const opacity = (1 - distance / 120) * 0.3;

@@ -2,27 +2,36 @@ import React from 'react';
 
 const ServicesHero = () => {
   return (
-    <section className="pt-32 pb-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-8">
-            <span className="text-sm font-medium text-gray-500 tracking-widest uppercase">AI × BUSINESS CONSULTING</span>
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-light mb-12 leading-tight">
-            <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
-              Services
-            </span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl mb-16 text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
-            AIが実現する、人にしかできない仕事に集中できる未来へ。
-            <br />
-            中小企業診断士とAIエンジニアが最適なDXを設計し、
-            <br />
-            一人当たり20%の業務削減を実現いたします。
-          </p>
+    <section className="relative pt-20 bg-white">
+      {/* Banner Image */}
+      <div className="relative h-[300px] md:h-[400px] lg:h-[450px] overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('/images/service-banner.png')`,
+          }}
+        >
+          {/* Dark Overlay for better text visibility */}
+          <div className="absolute inset-0 bg-black/20"></div>
         </div>
+
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center px-4">
+            <div className="mb-6">
+              <span className="text-base font-semibold text-white tracking-widest uppercase drop-shadow-lg">AI × BUSINESS CONSULTING</span>
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-medium mb-8 text-white drop-shadow-2xl">
+              Services
+            </h1>
+
+          </div>
+        </div>
+
+        {/* Gradient Overlay at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
       </div>
     </section>
   );

@@ -27,10 +27,10 @@ const Products = () => {
     },
     {
       icon: Search,
-      name: 'DX診断ツール',
+      name: '効率化診断ツール',
       status: '企画中',
       statusColor: 'bg-yellow-100 text-yellow-800',
-      description: '企業のデジタル化レベルを診断し、最適なDX戦略を提案するオンラインツールです。',
+      description: '企業のデジタル化レベルを診断し、最適な効率化戦略を提案するオンラインツールです。',
       features: [
         '現状のデジタル化レベル診断',
         'カスタマイズされた改善提案',

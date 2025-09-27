@@ -13,7 +13,7 @@ const NewsSection = () => {
     },
     {
       id: 2,
-      title: '製造業A社様にてDX推進プロジェクトが完了',
+      title: '製造業A社様にて効率化推進プロジェクトが完了',
       date: '2024-01-10',
       excerpt: '生産管理システムの導入により、業務効率が30%向上。月間160時間の工数削減を実現しました。',
       image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=600'

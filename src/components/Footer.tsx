@@ -14,7 +14,7 @@ const Footer = () => {
             </Link>
             <p className="text-gray-600 font-light leading-relaxed mb-8">
               AIとビジネスの架け橋となり、企業の真の成長を支援するコンサルティング会社です。
-              中小企業診断士とAIエンジニアが最適なDXを設計し、持続可能な成長を実現します。
+              中小企業診断士とAIエンジニアが最適な効率化を設計し、持続可能な成長を実現します。
             </p>
             <div className="space-y-3">
               <div className="flex items-center text-gray-600">
@@ -43,7 +43,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/services" className="text-gray-600 hover:text-gray-900 transition-colors font-light">
-                  DX戦略策定
+                  効率化戦略策定
                 </Link>
               </li>
               <li>
